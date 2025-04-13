@@ -1,5 +1,7 @@
-import { weatherSingleService } from '@/api/services/api/weatherSingleService';
-import { ApiResponse, IweatherData } from '@/types';
+import { isAxiosError } from 'axios';
+
+import { weatherSingleService } from '@/api/services/weather/api/';
+import { ApiResponse, IApiError, IweatherData } from '@/types';
 
 export const weatherMultipleService = async (
   cities: string[],
@@ -11,11 +13,14 @@ export const weatherMultipleService = async (
     try {
       const result = await weatherSingleService(city);
       return { status: 'fulfilled', value: result };
-    } catch (error: any) {
-      return {
-        status: 'rejected',
-        reason: { city, error: error.message || 'Неизвестная ошибка' },
-      };
+    } catch (error: unknown) {
+      let message = 'Не удалось получить данные о погоде';
+      if (isAxiosError<IApiError>(error)) {
+        message = error.response?.data?.message || error.message || message;
+      } else if (error instanceof Error) {
+        message = error.message || message;
+      }
+      throw new Error(message);
     }
   });
 

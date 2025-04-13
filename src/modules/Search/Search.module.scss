@@ -1,0 +1,27 @@
+.menu {
+  max-height: 0;
+  transition: max-height 0.2s ease-out, opacity 0.2s ease;
+  opacity: 0;
+  width: 100% !important;
+  top: 60px;
+  max-width: 1000px;
+  z-index: -1;
+
+  &Open {
+    max-height: 300px;
+    opacity: 1;
+    z-index: 10;
+  }
+}
+
+.hover-bg-light:hover {
+  background-color: #f8f9fa;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.search{
+  width: 100%;
+}

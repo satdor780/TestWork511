@@ -1,6 +1,6 @@
 import { create } from 'zustand/index';
 
-import { weatherMultipleService } from '@/api/services/api/weatherMultipleService';
+import { weatherMultipleService } from '@/api/services/weather/api/';
 import { IweatherData } from '@/types';
 
 interface WeatherState {

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import { weatherSingleService } from '@/api/services/api/weatherSingleService';
-import { WeatherState } from '@/modules/DetailedForecast/types';
+import { weatherSingleService } from '@/api/services/weather/api/';
+import { WeatherState } from '@/api/services/weather/types';
 
 export const useSingleWeatherStore = create<WeatherState>((set) => ({
   currentWeather: null,

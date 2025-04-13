@@ -1,5 +1,7 @@
+import { isAxiosError } from 'axios';
+
 import { weatherApi } from '@/api/instance';
-import { ApiResponse, IweatherData } from '@/types';
+import { ApiResponse, IApiError, IweatherData } from '@/types';
 
 export const weatherSingleService = async (city: string): Promise<ApiResponse<IweatherData>> => {
   try {
@@ -14,11 +16,13 @@ export const weatherSingleService = async (city: string): Promise<ApiResponse<Iw
       data,
       status: response.status,
     };
-  } catch (error: any) {
-    const message =
-      error.response?.data?.message === 'city not found'
-        ? 'Город не найден'
-        : error.message || 'Не удалось получить данные о погоде';
+  } catch (error: unknown) {
+    let message = 'Не удалось получить данные о погоде';
+    if (isAxiosError<IApiError>(error)) {
+      message = error.response?.data?.message || error.message || message;
+    } else if (error instanceof Error) {
+      message = error.message || message;
+    }
     throw new Error(message);
   }
 };

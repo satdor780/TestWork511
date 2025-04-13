@@ -1,13 +1,37 @@
 :root {
-  --background: #ffffff;
+  --background: #0E0E0E;
   --foreground: #ffffff;
+  --default-background: #161617;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #ffffff;
-    --foreground: #000000;
+    --background: #0E0E0E;
+    --foreground: #ffffff;
+    --default-background: #161617;
   }
+}
+
+.bg-background {
+  background-color: var(--background) !important;
+}
+
+.text-foreground {
+  color: var(--foreground) !important;
+}
+
+.bg-default-background {
+  background-color: var(--default-background) !important;
+}
+
+.gothic-font {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bg-violet{
+  background-color: #7f4dff !important;
 }
 
 html,
@@ -26,9 +50,30 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  line-height: 120%;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+p{
+  padding: 0;
+  margin: 0
+}
+
+ul{
+  list-style-type: none;
+}
+
+.container{
+  max-width: 1000px;
+  background-color: var(--background);
+  margin: 20px auto;
+  padding: 0 !important;
+  @media (max-width: 1040px){
+    margin: 20px 0;
+    padding: 0 20px !important;
+  }
 }
