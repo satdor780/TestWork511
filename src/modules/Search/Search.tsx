@@ -1,9 +1,9 @@
 'use client';
 
 import cn from 'classnames';
-import debounce from 'lodash/debounce';
 import Link from 'next/link';
-import React, { FC, useEffect, useRef, useCallback, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { useSearchStore } from '@/modules/Search/store/searchStore';
 import { Input } from '@/UI/Input/Input';
@@ -18,12 +18,11 @@ export const Search: FC = () => {
   const { searchQuery, results, isLoading, error, setSearchQuery, fetchCities, clearResults } =
     useSearchStore();
 
-  const debouncedFetchCities = useCallback(
-    debounce((query: string) => {
+  const debouncedFetchCities = useDebouncedCallback((query: string) => {
+    if (query.trim()) {
       fetchCities(query);
-    }, 1000),
-    [fetchCities],
-  );
+    }
+  }, 1000);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -104,7 +103,7 @@ export const Search: FC = () => {
             {!isLoading &&
               results.map((city) => (
                 <li
-                  key={`${city.lat}-${city.lon}`}
+                  key={city.name}
                   className="p-2 hover-bg-light cursor-pointer"
                   onClick={handleCityClick}
                 >
