@@ -19,8 +19,9 @@ export const useSingleWeatherStore = create<WeatherState>((set) => ({
         city,
         isLoading: false,
       });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      set({ error: errorMessage, isLoading: false });
     }
   },
   clearError: () => set({ error: null }),

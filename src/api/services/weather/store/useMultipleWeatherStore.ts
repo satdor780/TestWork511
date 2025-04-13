@@ -1,5 +1,6 @@
 import { create } from 'zustand/index';
 
+import { CustomApiError } from '@/api/interceptors';
 import { weatherMultipleService } from '@/api/services/weather/api/';
 import { IweatherData } from '@/types';
 
@@ -32,12 +33,15 @@ export const useMultipleWeatherStore = create<WeatherState>((set) => ({
         isLoading: false,
         error: errorMessage,
       });
-    } catch (error: any) {
-      set({
-        weatherData: [],
-        isLoading: false,
-        error: error.message || 'Произошла непредвиденная ошибка при загрузке погоды',
-      });
+    } catch (error) {
+      if (error instanceof Error) {
+        const apiError = error as CustomApiError;
+        console.error('API Error:', {
+          message: apiError.message,
+          status: apiError.status,
+          data: apiError.data,
+        });
+      }
     }
   },
 

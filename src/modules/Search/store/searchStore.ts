@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 
 import { searchCities } from '@/modules/Search/api/searchApi';
-import {City, ISearchData, SearchState} from '@/modules/Search/types';
+import { City, ISearchData, SearchState } from '@/modules/Search/types';
 import { ApiResponse } from '@/types';
+import {CustomApiError} from "@/api/interceptors";
 
 const defaultPopularCities: City[] = [
   {
@@ -65,12 +66,15 @@ export const useSearchStore = create<SearchState>((set) => ({
         isLoading: false,
         error: null,
       });
-    } catch (error: any) {
-      set({
-        isLoading: false,
-        error: error.message || 'Не удалось выполнить поиск',
-        results: [],
-      });
+    } catch (error) {
+      if (error instanceof Error) {
+        const apiError = error as CustomApiError;
+        console.error('API Error:', {
+          message: apiError.message,
+          status: apiError.status,
+          data: apiError.data,
+        });
+      }
     }
   },
 
