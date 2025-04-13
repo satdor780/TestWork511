@@ -1,0 +1,22 @@
+.temp{
+  font-size: 50px;
+  padding-right: 30px;
+  padding-top: 30px;
+}
+
+.temp__img{
+  position: absolute;
+  top: -20px;
+  right: -15px;
+}
+
+.icon{
+  padding: 5px;
+  background: #0e0e0e;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
