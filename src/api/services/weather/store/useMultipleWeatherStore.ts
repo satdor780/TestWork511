@@ -1,3 +1,5 @@
+'use client';
+
 import { create } from 'zustand/index';
 
 import { CustomApiError } from '@/api/interceptors';

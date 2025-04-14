@@ -1,3 +1,5 @@
+'use client';
+
 import { create } from 'zustand';
 
 import { weatherSingleService } from '@/api/services/weather/api/';
