@@ -28,6 +28,7 @@ export const useWeatherStore = create<WeatherState>((set) => ({
       } else if (error instanceof Error) {
         message = error.message || message;
       }
+      set({ isLoading: false, error: message });
       throw new Error(message);
     }
   },

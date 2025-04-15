@@ -38,11 +38,14 @@ export const useMultipleWeatherStore = create<WeatherState>((set) => ({
     } catch (error) {
       if (error instanceof Error) {
         const apiError = error as CustomApiError;
+        set({ isLoading: false, error: apiError.message });
         console.error('API Error:', {
           message: apiError.message,
           status: apiError.status,
           data: apiError.data,
         });
+      } else {
+        set({ isLoading: false, error: 'Неизвестная ошибка' });
       }
     }
   },

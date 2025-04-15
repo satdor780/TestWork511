@@ -21,13 +21,6 @@ const defaultPopularCities: City[] = [
     country: 'GB',
   },
   {
-    name: 'New York',
-    local_names: { ru: 'Нью-Йорк' },
-    lat: 40.7128,
-    lon: -74.006,
-    country: 'US',
-  },
-  {
     name: 'Tokyo',
     local_names: { ru: 'Токио', ja: '東京' },
     lat: 35.6762,
@@ -69,11 +62,14 @@ export const useSearchStore = create<SearchState>((set) => ({
     } catch (error) {
       if (error instanceof Error) {
         const apiError = error as CustomApiError;
+        set({ isLoading: false, error: apiError.message });
         console.error('API Error:', {
           message: apiError.message,
           status: apiError.status,
           data: apiError.data,
         });
+      } else {
+        set({ isLoading: false, error: 'Неизвестная ошибка' });
       }
     }
   },
