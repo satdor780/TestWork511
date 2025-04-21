@@ -6,7 +6,7 @@ import { logError } from '@/utils/logError';
 
 export const searchCities = async (search: string): Promise<ApiResponse<ISearchData>> => {
   try {
-    const response = await geoApi.get('/directs', {
+    const response = await geoApi.get('/direct', {
       params: {
         q: search,
         limit: 5,
