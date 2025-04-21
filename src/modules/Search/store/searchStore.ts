@@ -36,6 +36,25 @@ const defaultPopularCities: City[] = [
   },
 ];
 
+const getUserFriendlyMessage = (error: CustomApiError): string => {
+  switch (error.status) {
+    case 400:
+      return 'Некорректный запрос. Проверьте правильность введенного названия города.';
+    case 401:
+      return 'Не удалось выполнить поиск. Пожалуйста, попробуйте позже.';
+    case 403:
+      return 'Доступ к данным ограничен. Попробуйте позже или свяжитесь с поддержкой.';
+    case 404:
+      return 'Город не найден. Проверьте правильность названия или попробуйте другой город.';
+    case 429:
+      return 'Слишком много запросов. Подождите немного и попробуйте снова.';
+    case 500:
+      return 'Произошла ошибка на сервере. Мы уже работаем над этим, попробуйте позже.';
+    default:
+      return 'Не удалось выполнить поиск. Пожалуйста, попробуйте снова позже.';
+  }
+};
+
 export const useSearchStore = create<SearchState>((set) => ({
   searchQuery: '',
   results: defaultPopularCities,
@@ -59,18 +78,19 @@ export const useSearchStore = create<SearchState>((set) => ({
         isLoading: false,
         error: null,
       });
-    } catch (error) {
+    } catch (error: unknown) {
+      let errorMessage = 'Произошла неизвестная ошибка';
+      let errorStatus: number | undefined;
+
       if (error instanceof Error) {
-        const apiError = error as CustomApiError;
-        set({ isLoading: false, error: apiError.message });
-        console.error('API Error:', {
-          message: apiError.message,
-          status: apiError.status,
-          data: apiError.data,
-        });
-      } else {
-        set({ isLoading: false, error: 'Неизвестная ошибка' });
+        const customError = error as CustomApiError;
+        errorMessage = getUserFriendlyMessage(error);
+        errorStatus = customError.status;
       }
+      set({
+        error: { message: errorMessage, status: errorStatus },
+        isLoading: false,
+      });
     }
   },
 

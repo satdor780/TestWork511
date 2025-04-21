@@ -22,7 +22,7 @@ export interface SearchState {
   searchQuery: string;
   results: ISearchData;
   isLoading: boolean;
-  error: string | null;
+  error: { message: string; status?: number } | null;
   setSearchQuery: (query: string) => void;
   fetchCities: (query: string) => Promise<void>;
   clearResults: () => void;
