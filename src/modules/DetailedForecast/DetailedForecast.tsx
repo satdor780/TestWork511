@@ -5,6 +5,7 @@ import { FC, useEffect } from 'react';
 import { useSingleWeatherStore } from '@/api/services/weather';
 import { Emptiness } from '@/components/Emptiness/Emptiness';
 import { WeatherCard, WeatherCardSkeleton } from '@/components/WeatherCard';
+import { cleanCityName } from '@/hooks/cleanCityName';
 import { Forecast } from '@/modules/DetailedForecast/components/Forecast';
 import { useWeatherStore } from '@/modules/DetailedForecast/store/weatherStore';
 import { Title } from '@/UI/Title/Title';
@@ -30,31 +31,26 @@ export const DetailedForecast: FC<{
   }, [city, fetchWeather, fetchForecast]);
 
   const isLoading = weatherLoading || forecastLoading;
-  const error = weatherError || forecastError;
 
   if (isLoading) {
     return (
       <div className="d-flex flex-column gap-3 p-3">
-        <Title title={`Погода в ${city}`} />
+        <Title title={`Погода в ${cleanCityName(city)}`} />
         <WeatherCardSkeleton />
       </div>
     );
   }
 
-  if (error) {
+  if (weatherError || !currentWeather) {
     return (
       <div className="d-flex flex-column gap-3 p-3">
-        <Title title={`Погода в ${city}`} />
-        <Emptiness title="Ошибка" subtitle="Не удалось загрузить данные о погоде." />
-      </div>
-    );
-  }
-
-  if (!currentWeather) {
-    return (
-      <div className="d-flex flex-column gap-3 p-3">
-        <Title title={`Погода в ${city}`} />
-        <Emptiness title="Данные отсутствуют" subtitle="Не удалось загрузить данные о погоде." />
+        <Title title={`Погода в ${cleanCityName(city)}`} />
+        <Emptiness
+          title="Ошибка"
+          subtitle={
+            weatherError?.message ? weatherError.message : 'Не удалось загрузить данные о погоде.'
+          }
+        />
       </div>
     );
   }
@@ -63,7 +59,16 @@ export const DetailedForecast: FC<{
     <div className="d-flex flex-column gap-3 p-3">
       <Title title={`Погода в ${currentWeather.name}`} />
       <WeatherCard weather={currentWeather} />
-      {forecast && <Forecast forecast={forecast} />}
+      {forecast.length === 0 || forecastError ? (
+        <Emptiness
+          title="Ошибка"
+          subtitle={
+            forecastError?.message ? forecastError.message : 'Не удалось загрузить данные о погоде.'
+          }
+        />
+      ) : (
+        <Forecast forecast={forecast} />
+      )}
     </div>
   );
 };

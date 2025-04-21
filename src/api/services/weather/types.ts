@@ -5,7 +5,7 @@ export interface WeatherState {
   city: string;
   isLoading: boolean;
   forecast: ForecastData[] | [];
-  error: string | null;
+  error: { message: string; status?: number } | null;
   fetchWeather: (city: string) => Promise<void>;
   clearError: () => void;
   setCity: (city: string) => void;

@@ -1,19 +1,30 @@
-import { isAxiosError } from 'axios';
 import { create } from 'zustand';
 
+import { CustomApiError } from '@/api/interceptors';
 import { fetchForecast } from '@/modules/DetailedForecast/api/forecastApi';
 import { WeatherState } from '@/modules/DetailedForecast/types';
-import { IApiError } from '@/types';
+
+const getUserFriendlyMessage = (error: CustomApiError): string => {
+  switch (error.status) {
+    case 404:
+      return 'Город не найден';
+    case 401:
+      return 'Ошибка авторизации: проверьте API-ключ';
+    case 429:
+      return 'Превышен лимит запросов. Попробуйте позже';
+    default:
+      return `Ошибка сервера: код ${error.status}, мы уже работаем над этим`;
+  }
+};
 
 export const useWeatherStore = create<WeatherState>((set) => ({
   forecast: [],
   city: '',
-  isLoading: false,
+  isLoading: true,
   error: null,
 
   fetchWeather: async (city: string) => {
     if (!city.trim()) return;
-    set({ isLoading: true, error: null });
     try {
       const forecastResponse = await fetchForecast(city);
       set({
@@ -22,14 +33,18 @@ export const useWeatherStore = create<WeatherState>((set) => ({
         isLoading: false,
       });
     } catch (error: unknown) {
-      let message = 'Не удалось получить данные о погоде';
-      if (isAxiosError<IApiError>(error)) {
-        message = error.response?.data?.message || error.message || message;
-      } else if (error instanceof Error) {
-        message = error.message || message;
+      let errorMessage = 'Произошла неизвестная ошибка';
+      let errorStatus: number | undefined;
+
+      if (error instanceof Error) {
+        const customError = error as CustomApiError;
+        errorMessage = getUserFriendlyMessage(error);
+        errorStatus = customError.status;
       }
-      set({ isLoading: false, error: message });
-      throw new Error(message);
+      set({
+        error: { message: errorMessage, status: errorStatus },
+        isLoading: false,
+      });
     }
   },
 

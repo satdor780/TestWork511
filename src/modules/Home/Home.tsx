@@ -33,7 +33,7 @@ export const Home: FC = () => {
     return (
       <Emptiness
         title="Не удалось загрузить погоду"
-        subtitle="Похоже, произошла ошибка. Проверьте подключение к интернету или попробуйте позже."
+        subtitle={error?.message ? error.message : 'Неизвестная ошибка'}
       />
     );
   }

@@ -6,21 +6,30 @@ export const weatherMultipleService = async (
   cities: string[],
 ): Promise<{
   successful: ApiResponse<IweatherData>[];
-  failed: { city: string; error: string }[];
+  failed: {
+    city: string;
+    error: string;
+    status?: number;
+  }[];
 }> => {
   const requests = cities.map(async (city) => {
     try {
       const result = await weatherSingleService(city);
       return { status: 'fulfilled', value: result };
-    } catch (error) {
+    } catch (error: unknown) {
+      let message = 'Не удалось получить данные о погоде';
+      let status: number | undefined;
+
       if (error instanceof Error) {
         const apiError = error as CustomApiError;
-        console.error('API Error:', {
-          message: apiError.message,
-          status: apiError.status,
-          data: apiError.data,
-        });
+        message = apiError.message;
+        status = apiError.status;
       }
+
+      return {
+        status: 'rejected' as const,
+        reason: { city, error: message, status },
+      };
     }
   });
 

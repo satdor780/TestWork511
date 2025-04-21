@@ -10,33 +10,49 @@ import { Title } from '@/UI/Title/Title';
 
 export const Favorites: FC = () => {
   const favorites = useFavoritesStore((state) => state.favorites);
+  const isHydrated = useFavoritesStore((state) => state.isHydrated);
+
   const isLoading = useMultipleWeatherStore((state) => state.isLoading);
   const fetchWeather = useMultipleWeatherStore((state) => state.fetchMultipleWeathers);
-  const weatherData = useMultipleWeatherStore((state) => state.weatherData);
+  const weathersData = useMultipleWeatherStore((state) => state.weatherData);
   const error = useMultipleWeatherStore((state) => state.error);
 
   useEffect(() => {
-    fetchWeather(favorites);
-  }, [fetchWeather]);
+    if (isHydrated) {
+      fetchWeather(favorites);
+    }
+  }, [fetchWeather, favorites]);
 
-  if (isLoading) {
+  if (isLoading || !isHydrated) {
     return (
       <div className="d-flex flex-column gap-3 p-3">
         <Title title="Featured Cities" />
-        {favorites.map((city) => (
-          <WeatherCardSkeleton key={city} />
+        {Array.from({ length: 3 }).map((_, index) => (
+          <WeatherCardSkeleton key={index} />
         ))}
       </div>
     );
   }
 
-  if (error || weatherData.length === 0) {
+  if (favorites.length === 0 && isHydrated) {
     return (
       <div className="d-flex flex-column gap-3 p-3">
-        <Title title="Featured Cities" />
+        <Title title={`Featured Cities (${favorites.length})`} />
         <Emptiness
-          title={weatherData.length === 0 ? 'Данные недоступны' : 'Ошибка'}
-          subtitle={error || 'Не удалось загрузить погоду. Попробуйте позже.'}
+          title="У вас нету избранных городов"
+          subtitle="Нажмите на ♡ чтобы города появились тут"
+        />
+      </div>
+    );
+  }
+
+  if (error || weathersData.length === 0) {
+    return (
+      <div className="d-flex flex-column gap-3 p-3">
+        <Title title={`Featured Cities (${favorites.length})`} />
+        <Emptiness
+          title={weathersData.length === 0 ? 'Данные недоступны' : 'Ошибка'}
+          subtitle={error?.message || 'Не удалось загрузить погоду. Попробуйте позже.'}
         />
       </div>
     );
@@ -45,7 +61,7 @@ export const Favorites: FC = () => {
   return (
     <div className="d-flex flex-column gap-3 p-3">
       <Title title="Featured Cities" />
-      {weatherData.map((weather) => (
+      {weathersData.map((weather) => (
         <WeatherCard key={weather.id} weather={weather} />
       ))}
     </div>

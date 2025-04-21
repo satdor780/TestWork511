@@ -2,18 +2,32 @@
 
 import { create } from 'zustand';
 
+import { CustomApiError } from '@/api/interceptors';
 import { weatherSingleService } from '@/api/services/weather/api/';
 import { WeatherState } from '@/api/services/weather/types';
+
+const getUserFriendlyMessage = (error: CustomApiError): string => {
+  switch (error.status) {
+    case 404:
+      return 'Город не найден';
+    case 401:
+      return 'Ошибка авторизации: проверьте API-ключ';
+    case 429:
+      return 'Превышен лимит запросов. Попробуйте позже';
+    default:
+      return `Ошибка сервера: код ${error.status}, мы уже работаем над этим`;
+  }
+};
 
 export const useSingleWeatherStore = create<WeatherState>((set) => ({
   currentWeather: null,
   forecast: [],
   city: '',
-  isLoading: false,
+  isLoading: true,
   error: null,
+
   fetchWeather: async (city: string) => {
     if (!city.trim()) return;
-    set({ isLoading: true, error: null });
     try {
       const weatherResponse = await weatherSingleService(city);
       set({
@@ -22,8 +36,18 @@ export const useSingleWeatherStore = create<WeatherState>((set) => ({
         isLoading: false,
       });
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      set({ error: errorMessage, isLoading: false });
+      let errorMessage = 'Произошла неизвестная ошибка';
+      let errorStatus: number | undefined;
+
+      if (error instanceof Error) {
+        const customError = error as CustomApiError;
+        errorMessage = getUserFriendlyMessage(error);
+        errorStatus = customError.status;
+      }
+      set({
+        error: { message: errorMessage, status: errorStatus },
+        isLoading: false,
+      });
     }
   },
   clearError: () => set({ error: null }),

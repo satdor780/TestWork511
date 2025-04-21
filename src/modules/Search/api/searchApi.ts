@@ -7,7 +7,7 @@ import { ApiResponse } from '@/types';
 
 export const searchCities = async (search: string): Promise<ApiResponse<ISearchData>> => {
   try {
-    const response = await geoApi.get('/direct', {
+    const response = await geoApi.get('/directs', {
       params: {
         q: search,
         limit: 5,

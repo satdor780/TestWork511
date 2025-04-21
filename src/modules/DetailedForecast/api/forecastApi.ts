@@ -1,7 +1,6 @@
-import { AxiosError } from 'axios';
-
 import { weatherApi } from '@/api/instance';
 import { CustomApiError } from '@/api/interceptors';
+import { logError } from '@/hooks/logError';
 import { IForecastList } from '@/modules/DetailedForecast/types';
 import { ApiResponse } from '@/types';
 
@@ -19,25 +18,22 @@ export const fetchForecast = async (city: string): Promise<ApiResponse<IForecast
       status: response.status,
     };
   } catch (error: unknown) {
-    let message = 'Не удалось получить данные о погоде';
-    let status: number | undefined;
-
-    if (error instanceof AxiosError) {
+    if (error instanceof Error) {
       const customError = error as CustomApiError;
-      message = customError.message || message;
-      status = customError.status;
-    } else if (error instanceof Error) {
-      message = error.message || message;
+      const message = customError.message;
+
+      logError('Weather forecast API Error', {
+        city,
+        message,
+        status: customError.status,
+        data: customError.data,
+      });
+
+      throw customError;
     }
 
-    console.error('Weather API Error:', {
-      message,
-      status,
-      data: error instanceof AxiosError ? error.response?.data : undefined,
-    });
-
-    const newError = new Error(message) as CustomApiError;
-    newError.status = status;
-    throw newError;
+    const message = 'Неизвестная ошибка';
+    logError(message, { city });
+    throw new Error(message);
   }
 };
