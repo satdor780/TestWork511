@@ -1,4 +1,4 @@
-import { Emptiness } from '@/components/Emptiness/Emptiness';
+import { Emptiness } from '@/components/shared/Emptiness/Emptiness';
 
 export default function NotFound() {
   return (

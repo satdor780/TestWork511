@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Header } from '@/modules/Header/Header';
+import { Header } from '@/components/widgets/Header/';
 
 import type { Metadata } from 'next';
 

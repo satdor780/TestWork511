@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { useSearchStore } from '@/modules/Search/store/searchStore';
+import { useSearchStore } from '@/components/shared/Search/store/searchStore';
 import { Input } from '@/UI/Input/Input';
 
 import styles from './Search.module.scss';

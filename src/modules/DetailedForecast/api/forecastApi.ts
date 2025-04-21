@@ -1,8 +1,8 @@
 import { weatherApi } from '@/api/instance';
 import { CustomApiError } from '@/api/interceptors';
-import { logError } from '@/hooks/logError';
 import { IForecastList } from '@/modules/DetailedForecast/types';
 import { ApiResponse } from '@/types';
+import { logError } from '@/utils/logError';
 
 export const fetchForecast = async (city: string): Promise<ApiResponse<IForecastList>> => {
   try {

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { FC } from 'react';
 
 import { Favorites, Humidity, TempMin, Waves, Wind } from '@/assets/icons';
-import styles from '@/components/WeatherCard/DetailedForecast.module.scss';
+import styles from '@/components/shared/WeatherCard/DetailedForecast.module.scss';
 import { useFavoritesStore } from '@/stores/useFavoritesStore';
 import { IweatherData } from '@/types';
 

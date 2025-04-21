@@ -3,8 +3,8 @@
 import { FC, useEffect } from 'react';
 
 import { useMultipleWeatherStore } from '@/api/services/weather';
-import { Emptiness } from '@/components/Emptiness/Emptiness';
-import { WeatherCard, WeatherCardSkeleton } from '@/components/WeatherCard';
+import { Emptiness } from '@/components/shared/Emptiness';
+import { WeatherCard, WeatherCardSkeleton } from '@/components/shared/WeatherCard';
 import { Title } from '@/UI/Title/Title';
 
 const defaultPopularCities: string[] = ['Moscow', 'Paris', 'Tokyo', 'Amsterdam', 'Berlin'];

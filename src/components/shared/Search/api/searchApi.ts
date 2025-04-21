@@ -1,8 +1,8 @@
 import { geoApi } from '@/api/instance';
 import { CustomApiError } from '@/api/interceptors';
-import { logError } from '@/hooks/logError';
-import { ISearchData } from '@/modules/Search/types';
+import { ISearchData } from '@/components/shared/Search/types';
 import { ApiResponse } from '@/types';
+import { logError } from '@/utils/logError';
 
 export const searchCities = async (search: string): Promise<ApiResponse<ISearchData>> => {
   try {

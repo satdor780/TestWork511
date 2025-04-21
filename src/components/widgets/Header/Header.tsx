@@ -2,14 +2,15 @@ import Link from 'next/link';
 import { FC } from 'react';
 
 import { Favorites } from '@/assets/icons';
-import { Search } from '@/modules/Search';
+
+import { Search } from '../../shared/Search';
 
 export const Header: FC = () => {
   return (
     <header className="d-flex align-items-center gap-3 mb-4">
       <div className="logo">
         <h1 className="gothic-font fs-2 mb-0">
-          <Link href="/">Weather</Link>
+          <Link href="/public">Weather</Link>
         </h1>
       </div>
       <Search />

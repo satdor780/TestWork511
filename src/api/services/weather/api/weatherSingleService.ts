@@ -1,7 +1,7 @@
 import { weatherApi } from '@/api/instance';
 import { CustomApiError } from '@/api/interceptors';
-import { logError } from '@/hooks/logError';
 import { ApiResponse, IweatherData } from '@/types';
+import { logError } from '@/utils/logError';
 
 export const weatherSingleService = async (city: string): Promise<ApiResponse<IweatherData>> => {
   try {

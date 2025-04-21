@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
 import { CustomApiError } from '@/api/interceptors';
-import { searchCities } from '@/modules/Search/api/searchApi';
-import { City, ISearchData, SearchState } from '@/modules/Search/types';
+import { searchCities } from '@/components/shared/Search/api/searchApi';
+import { City, ISearchData, SearchState } from '@/components/shared/Search/types';
 import { ApiResponse } from '@/types';
 
 const defaultPopularCities: City[] = [

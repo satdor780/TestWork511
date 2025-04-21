@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { FC } from 'react';
 
-import { Emptiness } from '@/components/Emptiness/Emptiness';
+import { Emptiness } from '@/components/shared/Emptiness/Emptiness';
 import { DetailedForecast } from '@/modules/DetailedForecast';
 
 const DEFAULT_CITY = 'amsterdam';

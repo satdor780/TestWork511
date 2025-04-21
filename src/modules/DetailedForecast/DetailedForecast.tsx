@@ -3,12 +3,12 @@
 import { FC, useEffect } from 'react';
 
 import { useSingleWeatherStore } from '@/api/services/weather';
-import { Emptiness } from '@/components/Emptiness/Emptiness';
-import { WeatherCard, WeatherCardSkeleton } from '@/components/WeatherCard';
-import { cleanCityName } from '@/hooks/cleanCityName';
+import { Emptiness } from '@/components/shared/Emptiness';
+import { WeatherCard, WeatherCardSkeleton } from '@/components/shared/WeatherCard';
 import { Forecast } from '@/modules/DetailedForecast/components/Forecast';
 import { useWeatherStore } from '@/modules/DetailedForecast/store/weatherStore';
 import { Title } from '@/UI/Title/Title';
+import { cleanCityName } from '@/utils/cleanCityName';
 
 export const DetailedForecast: FC<{
   city: string;
